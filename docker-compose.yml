@@ -1,0 +1,51 @@
+version: "3.9"
+networks: 
+  test:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 10.1.0.0/24
+services:
+    snort:
+        container_name: snort
+        image: syndikit/snort2.91
+        ports: 
+            - 8007:80
+        networks:
+            test:
+                ipv4_address: 10.1.0.100
+        restart: on-failure
+    load-balancer:
+        image: nginx
+        ports:
+            - 8006:80
+            - 8005:443
+        container_name: load-balancer
+        networks: 
+            test:
+                -ipv4_address 10.1.0.101
+        restart: on-failure
+    buffer-overflow:
+        image: tleemcjr/metasploitable2:latest
+        tty: true
+        container_name: vuln_target
+        ports:
+            - 8009:80
+            - 8008:443
+        cap_add:
+            - ALL
+        # currently Docker doesn't like this because it is a blatant security vulnerability and the Docker daemon needs a separate kernel namespace
+        #sysctls: 
+            #kernel.randomize_va_space: 0
+        networks:
+            test:
+                ipv4_address: 10.1.0.102
+        restart: on-failure
+    kali:
+        image: "syndikit/kali:latest"
+        tty: true
+        networks:
+            test:
+                ipv4_address: 10.1.0.103
+        restart: on-failure
