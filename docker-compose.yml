@@ -17,14 +17,13 @@ services:
                 ipv4_address: 10.1.0.100
         restart: on-failure
     load-balancer:
-        image: nginx
+        build: vuln
         ports:
-            - 8006:80
-            - 8005:443
+            - 8080:8080
         container_name: load-balancer
         networks: 
             test:
-                -ipv4_address 10.1.0.101
+                ipv4_address: 10.1.0.101
         restart: on-failure
     buffer-overflow:
         image: tleemcjr/metasploitable2:latest
@@ -44,6 +43,7 @@ services:
         restart: on-failure
     kali:
         image: "syndikit/kali:latest"
+        container_name: kali
         tty: true
         networks:
             test:
