@@ -16,8 +16,9 @@ services:
             test:
                 ipv4_address: 10.1.0.100
         restart: on-failure
+
     load-balancer:
-        build: vuln
+        build: lb
         ports:
             - 8080:8080
         container_name: load-balancer
@@ -49,3 +50,17 @@ services:
             test:
                 ipv4_address: 10.1.0.103
         restart: on-failure
+    nginx:
+        image: ng-test:latest
+        container_name: ng1
+        networks: 
+            test:
+                ipv4_address: 10.1.0.104
+        restart: on-failure
+    nginx2:
+        image: ng-test2:latest
+        container_name: ng2
+        networks: 
+            test:
+                ipv4_address: 10.1.0.105
+        restart: on-failure    
