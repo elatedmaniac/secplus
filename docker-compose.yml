@@ -18,7 +18,8 @@ services:
         restart: on-failure
 
     load-balancer:
-        build: lb
+        build: 
+            context: ./lb
         ports:
             - 8080:8080
         container_name: load-balancer
@@ -51,16 +52,37 @@ services:
                 ipv4_address: 10.1.0.103
         restart: on-failure
     nginx:
-        image: ng-test:latest
+        build: 
+            context: ./nginx
         container_name: ng1
         networks: 
             test:
                 ipv4_address: 10.1.0.104
+        volumes: 
+            - ../php:/var/www/myapp:rw
+        links:
+            - php
         restart: on-failure
     nginx2:
-        image: ng-test2:latest
+        build: 
+            context: ./nginx
         container_name: ng2
         networks: 
             test:
                 ipv4_address: 10.1.0.105
-        restart: on-failure    
+        volumes: 
+            - ./../php:/var/www/myapp:rw
+        links:
+            - php
+        restart: on-failure
+    php:
+        image: php:fpm
+        container_name: php
+        expose: 
+            - 9000
+        networks: 
+            test:
+                ipv4_address: 10.1.0.106
+        restart: on-failure
+        volumes: 
+            - ./php:/var/www/myapp:rw
