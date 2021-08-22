@@ -11,7 +11,11 @@
 - Snort config
 - ELK setup
 - Automated configuration management/ documentation. 
+- Powershell script for configuration management
 
 ## References
 
 https://www.markdownguide.org/basic-syntax/ 
+
+For configuration managment, this site was useful for explaining system_profiler for MacOS terminal: 
+http://www.theinstructional.com/guides/a-closer-look-at-system-information
